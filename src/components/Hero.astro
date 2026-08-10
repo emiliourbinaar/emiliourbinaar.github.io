@@ -1,0 +1,282 @@
+---
+import { Image } from 'astro:assets';
+import heroFjord from '../assets/hero-fjord.jpg';
+import { SITE } from '../site.config';
+---
+
+<header class="hero" id="top">
+	<div class="hero__photo-wrap">
+		<Image
+			src={heroFjord}
+			alt=""
+			widths={[768, 1280, 1920, 2560]}
+			sizes="100vw"
+			width={2560}
+			height={1435}
+			loading="eager"
+			fetchpriority="high"
+			decoding="async"
+			class="hero__photo"
+		/>
+	</div>
+
+	{/* Signature element: slow node-and-edge graph over the water. */}
+	<canvas id="hero-graph" class="hero__graph" aria-hidden="true"></canvas>
+
+	<div class="hero__scrim" aria-hidden="true"></div>
+
+	<div class="hero__content">
+		<h1 class="hero__name">Emilio Urbina<br />Arredondo</h1>
+		<p class="hero__tagline">{SITE.tagline}</p>
+		<p class="hero__location">{SITE.location}</p>
+	</div>
+
+	<div class="hero__cue" aria-hidden="true">↓ scroll</div>
+</header>
+
+<style>
+	.hero {
+		position: relative;
+		height: 100vh;
+		height: 100svh;
+		min-height: 620px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		overflow: hidden;
+	}
+
+	.hero__photo-wrap {
+		position: absolute;
+		inset: 0;
+	}
+
+	.hero__photo {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+
+	.hero__graph {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	.hero__scrim {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background: linear-gradient(
+			to bottom,
+			rgba(28, 38, 36, 0.42) 0%,
+			rgba(28, 38, 36, 0.12) 34%,
+			rgba(28, 38, 36, 0.72) 74%,
+			#1c2624 100%
+		);
+	}
+
+	.hero__content {
+		position: relative;
+		width: 100%;
+		max-width: var(--measure);
+		margin: 0 auto;
+		padding: 0 var(--gutter) 132px;
+		pointer-events: none;
+	}
+
+	.hero__name {
+		margin: 0;
+		font-family: var(--ff-display);
+		font-weight: 400;
+		font-size: clamp(40px, 6.6vw, 92px);
+		line-height: 1.02;
+		letter-spacing: 0.01em;
+		color: var(--text);
+		text-wrap: balance;
+	}
+
+	.hero__tagline {
+		margin: 26px 0 0;
+		max-width: 620px;
+		font-size: clamp(16px, 1.5vw, 20px);
+		line-height: 1.5;
+		font-weight: 300;
+		color: var(--text-86);
+	}
+
+	.hero__location {
+		margin: 20px 0 0;
+		font-family: var(--ff-mono);
+		font-size: 11.5px;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--muted);
+	}
+
+	.hero__cue {
+		position: absolute;
+		left: var(--gutter);
+		bottom: 52px;
+		font-family: var(--ff-mono);
+		font-size: 11px;
+		letter-spacing: 0.18em;
+		color: var(--muted);
+		animation: cueDrift 3.4s ease-in-out infinite;
+	}
+
+	@media (max-width: 720px) {
+		.hero__content {
+			padding-bottom: 108px;
+		}
+
+		.hero__cue {
+			bottom: 40px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero__cue {
+			animation: none;
+			opacity: 0.8;
+		}
+	}
+</style>
+
+<script>
+	/*
+	 * Ambient node-and-edge graph rendered over the fjord water — reads as
+	 * current/ripple as much as a state diagram. Ported from the Claude Design
+	 * handoff. Under `prefers-reduced-motion: reduce` it paints a single static
+	 * frame and never starts an animation loop.
+	 */
+	const canvas = document.getElementById('hero-graph') as HTMLCanvasElement | null;
+	const ctx = canvas?.getContext('2d') ?? null;
+
+	if (canvas && ctx) {
+		const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+		interface Node {
+			x: number;
+			y: number;
+			vx: number;
+			vy: number;
+			r: number;
+			ph: number;
+		}
+
+		let nodes: Node[] = [];
+		let edges: Array<[number, number]> = [];
+		let w = 0;
+		let h = 0;
+		let raf = 0;
+		let reduce = motionQuery.matches;
+
+		const build = () => {
+			const dpr = Math.min(window.devicePixelRatio || 1, 2);
+			const rect = canvas.getBoundingClientRect();
+			w = rect.width;
+			h = rect.height;
+			canvas.width = Math.max(1, Math.round(w * dpr));
+			canvas.height = Math.max(1, Math.round(h * dpr));
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+			const n = Math.max(16, Math.min(34, Math.round(w / 46)));
+			nodes = Array.from({ length: n }, () => ({
+				x: Math.random() * w,
+				y: h * 0.34 + Math.random() * h * 0.6,
+				vx: (Math.random() - 0.5) * 0.1,
+				vy: (Math.random() - 0.5) * 0.05,
+				r: 1.1 + Math.random() * 1.5,
+				ph: Math.random() * Math.PI * 2,
+			}));
+
+			edges = [];
+			for (let i = 0; i < n; i++) {
+				for (let j = i + 1; j < n; j++) edges.push([i, j]);
+			}
+		};
+
+		const draw = (t: number) => {
+			ctx.clearRect(0, 0, w, h);
+
+			if (!reduce) {
+				for (const p of nodes) {
+					p.x += p.vx;
+					p.y += p.vy;
+					if (p.x < -20) p.x = w + 20;
+					if (p.x > w + 20) p.x = -20;
+					if (p.y < h * 0.28) p.vy = Math.abs(p.vy);
+					if (p.y > h) p.vy = -Math.abs(p.vy);
+				}
+			}
+
+			const maxD = Math.min(210, w * 0.17);
+
+			for (const [i, j] of edges) {
+				const a = nodes[i]!;
+				const b = nodes[j]!;
+				const d = Math.hypot(a.x - b.x, a.y - b.y);
+				if (d > maxD) continue;
+				const depth = Math.min(1, Math.max(0, (a.y + b.y) / 2 / h - 0.22) / 0.7);
+				const pulse = reduce ? 0.5 : 0.5 + 0.5 * Math.sin(t / 2600 + (i + j) * 0.7);
+				const alpha = (1 - d / maxD) * 0.2 * (0.35 + 0.65 * pulse) * (0.35 + 0.75 * depth);
+				ctx.strokeStyle = `rgba(107,133,119,${alpha.toFixed(3)})`;
+				ctx.lineWidth = 0.7;
+				ctx.beginPath();
+				ctx.moveTo(a.x, a.y);
+				ctx.lineTo(b.x, b.y);
+				ctx.stroke();
+			}
+
+			for (const p of nodes) {
+				const depth = Math.min(1, Math.max(0, p.y / h - 0.22) / 0.7);
+				const glow = reduce ? 0.55 : 0.55 + 0.45 * Math.sin(t / 1900 + p.ph);
+				ctx.fillStyle = `rgba(155,190,168,${(0.16 + 0.3 * glow * depth).toFixed(3)})`;
+				ctx.beginPath();
+				ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+				ctx.fill();
+			}
+
+			if (!reduce) raf = requestAnimationFrame(draw);
+		};
+
+		const start = () => {
+			cancelAnimationFrame(raf);
+			build();
+			if (reduce) draw(0);
+			else raf = requestAnimationFrame(draw);
+		};
+
+		if (typeof ResizeObserver !== 'undefined') {
+			let first = true;
+			const ro = new ResizeObserver(() => {
+				// The observer fires immediately on observe(); `start()` below
+				// already handled that first frame.
+				if (first) {
+					first = false;
+					return;
+				}
+				build();
+				if (reduce) draw(0);
+			});
+			ro.observe(canvas);
+		} else {
+			window.addEventListener('resize', () => {
+				build();
+				if (reduce) draw(0);
+			});
+		}
+
+		// React live if the user flips the OS motion setting.
+		motionQuery.addEventListener('change', (e) => {
+			reduce = e.matches;
+			start();
+		});
+
+		start();
+	}
+</script>

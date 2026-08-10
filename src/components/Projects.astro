@@ -1,0 +1,141 @@
+---
+import { PROJECTS } from '../data/projects';
+---
+
+<section class="section projects" id="projects" aria-labelledby="projects-label">
+	<p class="eyebrow" id="projects-label">Projects</p>
+	<div class="projects__list">
+		{
+			PROJECTS.map((project) => (
+				<a
+					class="card"
+					href={`#project-${project.slug}`}
+					data-project-card={project.slug}
+					aria-haspopup="dialog"
+					aria-expanded="false"
+					aria-controls="project-panel"
+				>
+					<div class="card__head">
+						<h3 class="card__title">{project.title}</h3>
+						<span class="card__expand" aria-hidden="true">
+							expand →
+						</span>
+					</div>
+					<p class="card__stack">{project.stack}</p>
+					<p class="card__hook">{project.hook}</p>
+					{project.inProgress && <p class="badge card__badge">In progress</p>}
+				</a>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.projects {
+		padding-top: 124px;
+	}
+
+	.projects__list {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	.card {
+		display: block;
+		width: 100%;
+		text-align: left;
+		cursor: pointer;
+		background: var(--surface);
+		border: 1px solid var(--border-card);
+		border-radius: 3px;
+		padding: 34px 38px;
+		color: inherit;
+		font: inherit;
+		transition:
+			background 0.25s ease,
+			border-color 0.25s ease,
+			transform 0.25s ease;
+	}
+
+	.card:hover,
+	.card:focus-visible {
+		background: var(--surface-hover);
+		border-color: var(--border-card-hover);
+		transform: translateY(-2px);
+		color: inherit;
+	}
+
+	.card__head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 24px;
+		flex-wrap: wrap;
+	}
+
+	.card__title {
+		margin: 0;
+		font-family: var(--ff-display);
+		font-weight: 400;
+		font-size: clamp(20px, 2vw, 26px);
+		line-height: 1.22;
+		color: var(--text);
+	}
+
+	.card__expand {
+		font-family: var(--ff-mono);
+		font-size: 11px;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--accent);
+		white-space: nowrap;
+	}
+
+	.card__stack {
+		margin: 12px 0 0;
+		font-family: var(--ff-mono);
+		font-size: 12px;
+		letter-spacing: 0.04em;
+		color: var(--muted);
+	}
+
+	.card__hook {
+		margin: 18px 0 0;
+		max-width: 680px;
+		font-size: 16.5px;
+		line-height: 1.6;
+		font-weight: 300;
+		color: var(--text-84);
+		text-wrap: pretty;
+	}
+
+	.card__badge {
+		margin-top: 16px;
+	}
+
+	@media (max-width: 720px) {
+		.projects {
+			padding-top: 92px;
+		}
+
+		.card {
+			padding: 26px 24px;
+		}
+
+		.card__expand {
+			font-size: 10.5px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.card,
+		.card:hover,
+		.card:focus-visible {
+			transform: none;
+			transition:
+				background 0.25s ease,
+				border-color 0.25s ease;
+		}
+	}
+</style>

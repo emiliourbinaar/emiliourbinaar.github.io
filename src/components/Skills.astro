@@ -1,0 +1,102 @@
+---
+const GROUPS: Array<{ heading: string; items: Array<{ label: string; note?: string }> }> = [
+	{
+		heading: 'Modeling & Optimization',
+		items: [
+			{ label: 'Regression' },
+			{ label: 'Reinforcement Learning (Q-Learning, MDPs)' },
+			{ label: 'Mixed-Integer Linear Programming' },
+			{ label: 'Statistical Inference & Hypothesis Testing' },
+		],
+	},
+	{
+		heading: 'Engineering & Tools',
+		items: [
+			{ label: 'Python (pandas, NumPy, scikit-learn)' },
+			{ label: 'SQL · R' },
+			{ label: 'Git/GitHub' },
+			{ label: 'Power BI · Docker' },
+			{ label: 'Airflow (learning)' },
+		],
+	},
+	{
+		heading: 'Languages',
+		items: [
+			{ label: 'Spanish', note: '(native)' },
+			{ label: 'English', note: '(professional working)' },
+			{ label: 'French', note: '(intermediate)' },
+			{ label: 'German', note: '(basic)' },
+		],
+	},
+];
+---
+
+<section class="section skills" id="skills" aria-labelledby="skills-label">
+	<p class="eyebrow" id="skills-label">Skills</p>
+	<div class="skills__grid">
+		{
+			GROUPS.map((group) => (
+				<div>
+					<h4 class="skills__heading">{group.heading}</h4>
+					<ul class="skills__list">
+						{group.items.map((item) => (
+							<li>
+								{item.label}
+								{item.note && <span class="skills__note"> {item.note}</span>}
+							</li>
+						))}
+					</ul>
+				</div>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.skills {
+		padding-top: 124px;
+	}
+
+	.skills__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 56px 64px;
+		max-width: 900px;
+	}
+
+	.skills__heading {
+		margin: 0 0 20px;
+		font-family: var(--ff-display);
+		font-weight: 400;
+		font-size: 20px;
+		color: var(--text);
+	}
+
+	.skills__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 11px;
+		font-size: 15.5px;
+		line-height: 1.5;
+		font-weight: 300;
+		color: var(--text-82);
+	}
+
+	.skills__note {
+		color: var(--muted);
+	}
+
+	@media (max-width: 720px) {
+		.skills {
+			padding-top: 92px;
+		}
+
+		.skills__grid {
+			grid-template-columns: 1fr;
+			gap: 40px;
+		}
+	}
+</style>

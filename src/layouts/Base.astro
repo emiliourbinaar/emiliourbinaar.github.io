@@ -1,0 +1,94 @@
+---
+import { Font } from 'astro:assets';
+import { SITE } from '../site.config';
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { title = `${SITE.name} — ${SITE.tagline}`, description = SITE.description } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="dark" />
+		<meta name="theme-color" content="#1C2624" />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="author" content={SITE.name} />
+		<link rel="canonical" href={canonical} />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta name="twitter:card" content="summary_large_image" />
+
+		<Font cssVariable="--font-fraunces" preload />
+		<Font cssVariable="--font-plex-sans" preload />
+		<Font cssVariable="--font-plex-mono" />
+
+		<noscript>
+			<style>
+				/*
+				 * No-JS fallback: the panel is driven by the URL fragment alone,
+				 * so `#project-<slug>` links still open the matching write-up.
+				 */
+				[data-project-article]:target {
+					display: block;
+				}
+				#project-panel:has([data-project-article]:target) {
+					transform: none;
+					visibility: visible;
+				}
+				#project-scrim {
+					display: none;
+				}
+			</style>
+		</noscript>
+	</head>
+	<body>
+		<a class="skip-link" href="#about">Skip to content</a>
+		<div class="page">
+			<slot />
+		</div>
+
+		<style>
+			.page {
+				position: relative;
+				overflow-x: hidden;
+			}
+
+			.skip-link {
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: 100;
+				transform: translateY(-140%);
+				margin: 12px;
+				padding: 12px 18px;
+				background: var(--surface);
+				color: var(--text);
+				border: 1px solid var(--accent);
+				border-radius: 2px;
+				font-family: var(--ff-mono);
+				font-size: 12px;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+				transition: transform 0.2s ease;
+			}
+
+			.skip-link:focus-visible {
+				transform: translateY(0);
+			}
+		</style>
+	</body>
+</html>

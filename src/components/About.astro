@@ -1,0 +1,47 @@
+---
+const PARAGRAPHS = [
+	"I'm a Data Science and Mathematics student at Tecnológico de Monterrey, and most of what's on this site is me figuring out how to model complicated systems — traffic networks, logistics fleets, and eventually, biological ones.",
+	"That last part is the point. I'm working toward a research career in computational biology: modeling how biological systems behave, ideally leading my own lab one day. Right now that means two things happening in parallel. First, I'm building the toolkit — statistics, optimization, machine learning, and soon deep learning and topological data analysis — by applying it to real problems, most of which aren't biological yet. Second, I'm building the biology itself, working through MIT's introductory biology course lecture by lecture and teaching myself flux balance analysis with COBRApy, because a systems modeler who doesn't understand the system isn't much use.",
+	"The projects below reflect where I am on that path: strong on the modeling and math side, growing on the biology side. I'd rather show that honestly than pretend the second half is further along than it is.",
+	"I'm currently looking for internships in data science and analytics, and planning an exchange semester (likely EPFL) as a step toward a Master's in Computational Biology and Bioinformatics.",
+];
+---
+
+<section class="section about" id="about" aria-labelledby="about-label">
+	<p class="eyebrow" id="about-label">About</p>
+	<div class="about__body">
+		{PARAGRAPHS.map((text) => <p>{text}</p>)}
+	</div>
+</section>
+
+<style>
+	.about {
+		padding-top: 128px;
+	}
+
+	.about__body {
+		max-width: 660px;
+		display: flex;
+		flex-direction: column;
+		gap: 26px;
+		font-size: 17.5px;
+		line-height: 1.72;
+		font-weight: 300;
+		color: var(--text-88);
+		text-wrap: pretty;
+	}
+
+	.about__body p {
+		margin: 0;
+	}
+
+	@media (max-width: 720px) {
+		.about {
+			padding-top: 96px;
+		}
+
+		.about__body {
+			font-size: 16.5px;
+		}
+	}
+</style>

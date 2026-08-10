@@ -1,0 +1,63 @@
+---
+import { CONTACT, SITE } from '../site.config';
+
+const links: Array<{ href: string; label: string; external: boolean }> = [
+	{ href: `mailto:${CONTACT.email}`, label: CONTACT.email, external: false },
+];
+
+if (CONTACT.linkedin) links.push({ href: CONTACT.linkedin, label: 'LinkedIn', external: true });
+if (CONTACT.github) links.push({ href: CONTACT.github, label: 'GitHub', external: true });
+---
+
+<footer class="section footer" id="contact" aria-labelledby="contact-label">
+	<p class="eyebrow" id="contact-label">Contact</p>
+	<div class="footer__links">
+		{
+			links.map(({ href, label, external }) =>
+				external ? (
+					<a href={href} target="_blank" rel="noreferrer noopener">
+						{label}
+					</a>
+				) : (
+					<a href={href}>{label}</a>
+				),
+			)
+		}
+	</div>
+	<p class="footer__copy">© {SITE.copyrightYear} {SITE.name}</p>
+</footer>
+
+<style>
+	.footer {
+		padding-top: 124px;
+		padding-bottom: 72px;
+	}
+
+	.footer__links {
+		display: flex;
+		gap: 44px;
+		flex-wrap: wrap;
+		font-size: 17px;
+		font-weight: 300;
+	}
+
+	.footer__copy {
+		margin: 64px 0 0;
+		font-family: var(--ff-mono);
+		font-size: 11px;
+		letter-spacing: 0.1em;
+		color: rgba(155, 168, 172, 0.6);
+	}
+
+	@media (max-width: 720px) {
+		.footer {
+			padding-top: 92px;
+			padding-bottom: 56px;
+		}
+
+		.footer__links {
+			gap: 22px;
+			font-size: 16px;
+		}
+	}
+</style>
