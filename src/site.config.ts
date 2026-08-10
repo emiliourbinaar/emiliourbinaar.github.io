@@ -35,4 +35,4 @@ export const CONTACT: {
 };
 
 /** Path to the CV, relative to the site base. Lives in `public/`. */
-export const CV_PATH = 'Main_CV.pdf';
+export const CV_PATH = 'main.pdf';

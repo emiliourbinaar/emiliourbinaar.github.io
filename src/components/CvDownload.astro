@@ -1,14 +1,17 @@
 ---
-import { CV_PATH } from '../site.config';
+import { CV_PATH, SITE } from '../site.config';
 
 // Built from BASE_URL so the link stays correct if `base` ever changes.
 const cvHref = `${import.meta.env.BASE_URL}${CV_PATH}`.replace(/\/{2,}/g, '/');
+// The file on disk is named for the repo's convenience; the *downloaded* copy
+// is named for the person reading it, so it stays identifiable in a folder.
+const cvFileName = `${SITE.name.replace(/\s+/g, '-')}-CV.pdf`;
 ---
 
 <section class="section cv" id="cv" aria-labelledby="cv-label">
 	<div class="ruled cv__row">
 		<p class="cv__title" id="cv-label">Full CV, one page.</p>
-		<a class="cv__button" href={cvHref} download>Download PDF ↓</a>
+		<a class="cv__button" href={cvHref} download={cvFileName}>Download PDF ↓</a>
 	</div>
 </section>
 
