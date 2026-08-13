@@ -6,7 +6,10 @@ export interface Project {
 	stack: string;
 	/** One-line hook shown on the compact card. */
 	hook: string;
-	/** Full write-up shown in the detail panel. Unabridged. */
+	/**
+	 * Full write-up shown in the detail panel. Unabridged. Split on a blank
+	 * line to render multiple paragraphs.
+	 */
 	body: string;
 	/** Optional "why it's here" line, rendered as a rule-marked aside. */
 	why?: string;
@@ -57,6 +60,27 @@ export const PROJECTS: Project[] = [
 		stack: 'Docker Compose · Airflow · Postgres · dbt · MinIO',
 		hook: 'A production-style order fulfillment pipeline, in progress — medallion architecture, Airflow, dbt, CI.',
 		body: 'A production-style data pipeline on Olist order data plus simulated streams: medallion architecture, Airflow orchestration, dbt transformations, CI via GitHub Actions. Built to demonstrate pipeline engineering at a level closer to what a data team actually runs, not just a notebook.',
+		inProgress: true,
+	},
+	{
+		slug: 'biolit-copilot',
+		title: 'BioLit Copilot',
+		stack: 'LangGraph · FastAPI · PubMedBERT/BioBERT · pgvector · Next.js',
+		hook: 'A multi-agent research assistant that reads biomedical literature and extracts entities and relationships — built eval-first, phase by phase.',
+		body:
+			"BioLit Copilot is a multi-agent system that reads biomedical papers and pulls structured information out of them — entities like diseases, chemicals, and genes, and the relationships between them — pulling live data from PubMed and bioRxiv. It's built around LangGraph for agent orchestration, with a local biomedical NER model (from the PubMedBERT/BioBERT family), entity canonicalization against standard vocabularies, and pgvector for document storage, behind a FastAPI backend and Next.js frontend.\n\n" +
+			"The thing I care about most in this project isn't the pipeline, it's the discipline behind it: every stage gets measured before it gets extended. Named entity recognition is currently sitting at F1 0.81 on a standard benchmark (BC5CDR), and entity linking at F1 0.78. Nothing gets called \"done\" without a number attached, and nothing gets built on top of a component until there's a demonstrated need for it — a rule that's caught real bugs early more than once, including a data-parsing error that would have silently cut linking accuracy by more than half.",
+		why: "Why it's here: this is the most direct overlap between my computational skills and computational biology specifically — it's literally a tool for biomedical research, and it's where the \"measure before you build\" habit from my optimization and modeling work is most visible.",
+		inProgress: true,
+	},
+	{
+		slug: 'ai-trading-system',
+		title: 'AI-Driven Trading System',
+		stack: 'Python · Alpaca API · Streamlit · Monte Carlo Backtesting',
+		hook: 'An independent trading system — strategy logic, Monte Carlo–based backtesting, and a live paper-trading dashboard, built end to end.',
+		body:
+			'Built independently, outside of coursework: a trading system that connects to the Alpaca API for market data and paper-trading execution, with a Streamlit dashboard for monitoring positions and performance. The backtesting layer uses Monte Carlo simulation rather than a single historical run, since one backtest on one path through history tells you very little about how a strategy holds up — running many simulated paths gives a more honest picture of the range of outcomes a strategy could actually produce.\n\n' +
+			"This one isn't on my standard CV by default; I bring it in selectively when it's relevant to a role, since a lot of the value here is in the engineering (API integration, simulation methodology, dashboarding) rather than in claiming any particular trading edge, and I want to be able to speak precisely to that distinction in an interview.",
 		inProgress: true,
 	},
 ];

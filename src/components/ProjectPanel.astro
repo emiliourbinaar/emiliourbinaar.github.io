@@ -26,7 +26,9 @@ import { PROJECTS } from '../data/projects';
 						{project.title}
 					</h2>
 					{project.inProgress && <p class="badge panel__badge">In progress</p>}
-					<p class="panel__body">{project.body}</p>
+					{project.body.split('\n\n').map((paragraph) => (
+						<p class="panel__body">{paragraph}</p>
+					))}
 					{project.why && <p class="panel__why">{project.why}</p>}
 				</article>
 			))
@@ -147,6 +149,12 @@ import { PROJECTS } from '../data/projects';
 		font-weight: 300;
 		color: var(--text-88);
 		text-wrap: pretty;
+	}
+
+	/* Paragraph break inside a write-up reads tighter than the gap that
+	 * separates the body from the title above it. */
+	.panel__body + .panel__body {
+		margin-top: 24px;
 	}
 
 	.panel__why {
