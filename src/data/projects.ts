@@ -17,6 +17,8 @@ export interface Project {
 	inProgress?: boolean;
 	/** Optional external links (live site, code), rendered at the foot of the panel. */
 	links?: { label: string; href: string }[];
+	/** Optional skills applied, each with the evidence for it, rendered as a list in the panel. */
+	skills?: { name: string; evidence: string }[];
 }
 
 export const PROJECTS: Project[] = [
@@ -34,6 +36,30 @@ export const PROJECTS: Project[] = [
 		links: [
 			{ label: 'Live site', href: 'https://emiliourbinaar.github.io/BioLit-Copilot/' },
 			{ label: 'Code', href: 'https://github.com/emiliourbinaar/BioLit-Copilot' },
+		],
+		skills: [
+			{ name: 'Research', evidence: 'A measurement-first design, pre-registered stop rules, and six instrument failures caught and published.' },
+			{ name: 'Experimental Design', evidence: 'Free baselines for every layer, gates fixed before any label existed, and blind annotation with controls.' },
+			{ name: 'Natural Language Processing (NLP)', evidence: 'The core of the project: finding and linking biomedical entities, clustering, and extracting findings.' },
+			{ name: 'Python', evidence: 'The whole backend, typed with Pydantic and checked with pyright.' },
+			{ name: 'Data Quality', evidence: 'DEF-0007, 0008 and 0009 were found and fixed, and a corpus-wide audit traced every figure they moved.' },
+			{ name: 'Large Language Models (LLM)', evidence: 'LLM arms were priced before spending, one LLM extractor was measured against a deterministic one (and lost), and the rest were retired unspent.' },
+			{ name: 'Information Extraction', evidence: 'Finding-sentence extraction (F1 0.62) and entity linking to MeSH.' },
+			{ name: 'Named Entity Recognition', evidence: 'Chemical and disease NER, measured on BC5CDR (F1 0.81).' },
+			{ name: 'Bioinformatics', evidence: 'PubMed and PMC through NCBI E-utilities, MeSH hierarchies, and pharmacological-action data.' },
+			{ name: 'Data Analysis', evidence: 'An acronym census, relevance screens, and agreement statistics.' },
+			{ name: 'Data Annotation', evidence: 'Blind annotation passes, adjudication, and agreement measured with π.' },
+			{ name: 'Test-Driven Development', evidence: 'Red-green discipline enforced with tdd-guard.' },
+			{ name: 'Software Testing', evidence: 'pytest and Vitest, cassette-based tests with no network access, and regression tests tied to real defects.' },
+			{ name: 'Technical Writing', evidence: 'A retrospective, an evaluation report, a defect log, and 23 decision records.' },
+			{ name: 'Software Architecture', evidence: 'A staged pipeline with a per-stage accounting ledger.' },
+			{ name: 'Data Governance', evidence: "A licence gate before quoting, strict Creative Commons attribution, and a schema that can't represent a leaked abstract." },
+			{ name: 'Debugging', evidence: 'Root causes traced across the parser, pipeline and fixtures, not just the symptoms.' },
+			{ name: 'CI/CD', evidence: 'GitHub Actions with backend and frontend jobs, and a deploy that runs only when both pass.' },
+			{ name: 'TypeScript', evidence: 'The evidence viewer, with types generated from the Python schema.' },
+			{ name: 'Front-End Development', evidence: 'A static Astro site, checked visually at desktop and mobile widths.' },
+			{ name: 'Git', evidence: 'A clean public commit history, a history rewrite to remove mis-licensed content, and merges verified in a clean worktree.' },
+			{ name: 'GitHub', evidence: 'Actions, Pages hosting, and repository management.' },
 		],
 	},
 	{
