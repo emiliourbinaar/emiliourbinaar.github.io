@@ -15,9 +15,27 @@ export interface Project {
 	why?: string;
 	/** Renders the "In progress" badge on both card and panel. */
 	inProgress?: boolean;
+	/** Optional external links (live site, code), rendered at the foot of the panel. */
+	links?: { label: string; href: string }[];
 }
 
 export const PROJECTS: Project[] = [
+	{
+		slug: 'biolit-copilot',
+		title: 'BioLit Copilot',
+		stack: 'Python · Pydantic · pytest · pyright · Astro · TypeScript · GitHub Actions',
+		hook: 'A biomedical literature pipeline built measurement-first: every layer had to beat a free baseline before it shipped.',
+		body:
+			"Given a clinical question, BioLit Copilot retrieves papers from PubMed, recognises chemicals and diseases, links them to MeSH, enforces each paper's licence before quoting anything, extracts finding sentences, clusters them by concept pair, orders the clusters by relevance to the question, and writes a deterministic answer.\n\n" +
+			"The interesting output is the evidence trail. Four of the five phases ended in a negative result, and three mechanisms that looked promising were measured and rejected. An LLM extractor lost to a deterministic control (F1 0.3054 vs 0.6238). The critic's derived gold standard measured invalid on blind annotation (π̂ 0.067), so its paid arms were retired unspent. A synthesis metric suite was retired after a one-word-per-paper baseline beat the real template on both comparative axes. Paid model spend for the entire project was $2.48.\n\n" +
+			"Six times, the instrument broke rather than the component: a ceiling the mechanism beat, a headline retracted after review, a metric suite that ranked outputs in the opposite order to their quality, and a control that could be answered without doing the task, among others. Each downgrade was published in place of the number it invalidated. The project keeps 23 architecture decision records, a scope record, and a defect log with 9 entries.\n\n" +
+			"A static evidence viewer follows four real runs through every stage, showing what each stage took in, what it removed and why. Every quoted sentence is verbatim from a licensed abstract and carries its full attribution: all authors, the publisher's copyright notice, and a link to the exact Creative Commons licence version. The build refuses to publish an excerpt that differs from its source by one character. Building the viewer surfaced a licensing bug in the PubMed parser, which led to a corpus-wide audit and dated restatements of the published figures, plus a second bug that truncated titles.",
+		why: "Why it's here: this is the most direct overlap between my computational skills and computational biology specifically — it's literally a tool for biomedical research, and it's where the \"measure before you build\" habit from my optimization and modeling work is most visible.",
+		links: [
+			{ label: 'Live site', href: 'https://emiliourbinaar.github.io/BioLit-Copilot/' },
+			{ label: 'Code', href: 'https://github.com/emiliourbinaar/BioLit-Copilot' },
+		],
+	},
 	{
 		slug: 'traffic-control',
 		title: 'Adaptive Intelligent Traffic Control',
@@ -60,17 +78,6 @@ export const PROJECTS: Project[] = [
 		stack: 'Docker Compose · Airflow · Postgres · dbt · MinIO',
 		hook: 'A production-style order fulfillment pipeline, in progress — medallion architecture, Airflow, dbt, CI.',
 		body: 'A production-style data pipeline on Olist order data plus simulated streams: medallion architecture, Airflow orchestration, dbt transformations, CI via GitHub Actions. Built to demonstrate pipeline engineering at a level closer to what a data team actually runs, not just a notebook.',
-		inProgress: true,
-	},
-	{
-		slug: 'biolit-copilot',
-		title: 'BioLit Copilot',
-		stack: 'LangGraph · FastAPI · PubMedBERT/BioBERT · pgvector · Next.js',
-		hook: 'A multi-agent research assistant that reads biomedical literature and extracts entities and relationships — built eval-first, phase by phase.',
-		body:
-			"BioLit Copilot is a multi-agent system that reads biomedical papers and pulls structured information out of them — entities like diseases, chemicals, and genes, and the relationships between them — pulling live data from PubMed and bioRxiv. It's built around LangGraph for agent orchestration, with a local biomedical NER model (from the PubMedBERT/BioBERT family), entity canonicalization against standard vocabularies, and pgvector for document storage, behind a FastAPI backend and Next.js frontend.\n\n" +
-			"The thing I care about most in this project isn't the pipeline, it's the discipline behind it: every stage gets measured before it gets extended. Named entity recognition is currently sitting at F1 0.81 on a standard benchmark (BC5CDR), and entity linking at F1 0.78. Nothing gets called \"done\" without a number attached, and nothing gets built on top of a component until there's a demonstrated need for it — a rule that's caught real bugs early more than once, including a data-parsing error that would have silently cut linking accuracy by more than half.",
-		why: "Why it's here: this is the most direct overlap between my computational skills and computational biology specifically — it's literally a tool for biomedical research, and it's where the \"measure before you build\" habit from my optimization and modeling work is most visible.",
 		inProgress: true,
 	},
 	{

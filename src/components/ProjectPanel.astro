@@ -30,6 +30,17 @@ import { PROJECTS } from '../data/projects';
 						<p class="panel__body">{paragraph}</p>
 					))}
 					{project.why && <p class="panel__why">{project.why}</p>}
+					{project.links && (
+						<ul class="panel__links">
+							{project.links.map((link) => (
+								<li>
+									<a href={link.href} target="_blank" rel="noopener noreferrer">
+										{link.label} ↗
+									</a>
+								</li>
+							))}
+						</ul>
+					)}
 				</article>
 			))
 		}
@@ -167,6 +178,19 @@ import { PROJECTS } from '../data/projects';
 		font-weight: 300;
 		color: var(--muted);
 		text-wrap: pretty;
+	}
+
+	.panel__links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px 28px;
+		margin: 36px 0 0;
+		padding: 0;
+		list-style: none;
+		font-family: var(--ff-mono);
+		font-size: 12px;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
 	}
 
 	/* Mobile: full-screen sheet rising from the bottom edge. Same content,
